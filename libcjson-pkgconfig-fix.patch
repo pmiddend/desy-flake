@@ -1,0 +1,13 @@
+diff --git a/libcrystfel/meson.build b/libcrystfel/meson.build
+index 0da646e2..a8d43b4a 100644
+--- a/libcrystfel/meson.build
++++ b/libcrystfel/meson.build
+@@ -27,7 +27,7 @@ endif
+ 
+ seedeedep = dependency('seedee', required: false)
+ if seedeedep.found()
+-  cjsondep = dependency('cjson',
++  cjsondep = dependency('libcjson',
+                         required: true,
+                         fallback: ['cjson', 'libcjson_dep'])
+   if cjsondep.found() and seedeedep.found()

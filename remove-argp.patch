@@ -1,0 +1,78 @@
+diff --git a/libcrystfel/src/indexers/asdf.h b/libcrystfel/src/indexers/asdf.h
+index a382b05d..ba421cdc 100644
+--- a/libcrystfel/src/indexers/asdf.h
++++ b/libcrystfel/src/indexers/asdf.h
+@@ -31,7 +31,7 @@
+ #ifndef ASDF_H
+ #define ASDF_H
+ 
+-#include <argp.h>
++/* #include <argp.h> */
+ #include "index.h"
+ 
+ #ifdef __cplusplus
+diff --git a/libcrystfel/src/indexers/felix.h b/libcrystfel/src/indexers/felix.h
+index 6379c4ee..d7b2e78b 100644
+--- a/libcrystfel/src/indexers/felix.h
++++ b/libcrystfel/src/indexers/felix.h
+@@ -30,7 +30,7 @@
+ #ifndef FELIX_H
+ #define FELIX_H
+ 
+-#include <argp.h>
++/* #include <argp.h> */
+ 
+ #include "cell.h"
+ 
+diff --git a/libcrystfel/src/indexers/fromfile.c b/libcrystfel/src/indexers/fromfile.c
+index 30305b21..f900fbeb 100644
+--- a/libcrystfel/src/indexers/fromfile.c
++++ b/libcrystfel/src/indexers/fromfile.c
+@@ -38,7 +38,7 @@
+ #include <assert.h>
+ #include <fenv.h>
+ #include <unistd.h>
+-#include <argp.h>
++/* #include <argp.h> */
+ 
+ #include "image.h"
+ #include "uthash.h"
+diff --git a/libcrystfel/src/indexers/fromfile.h b/libcrystfel/src/indexers/fromfile.h
+index caff07c5..04bea6d8 100644
+--- a/libcrystfel/src/indexers/fromfile.h
++++ b/libcrystfel/src/indexers/fromfile.h
+@@ -32,7 +32,7 @@
+ #ifndef FROMFILE_H
+ #define FROMFILE_H
+ 
+-#include <argp.h>
++/* #include <argp.h> */
+ 
+ #include "image.h"
+ 
+diff --git a/libcrystfel/src/indexers/taketwo.h b/libcrystfel/src/indexers/taketwo.h
+index 471b08b2..4f965911 100644
+--- a/libcrystfel/src/indexers/taketwo.h
++++ b/libcrystfel/src/indexers/taketwo.h
+@@ -31,7 +31,7 @@
+ #ifndef TAKETWO_H
+ #define TAKETWO_H
+ 
+-#include <argp.h>
++/* #include <argp.h> */
+ 
+ #include "cell.h"
+ #include "index.h"
+diff --git a/libcrystfel/src/indexers/xgandalf.h b/libcrystfel/src/indexers/xgandalf.h
+index b43f09ea..691a7ab8 100644
+--- a/libcrystfel/src/indexers/xgandalf.h
++++ b/libcrystfel/src/indexers/xgandalf.h
+@@ -30,7 +30,7 @@
+ #define LIBCRYSTFEL_SRC_XGANDALF_H
+ 
+ #include <stddef.h>
+-#include <argp.h>
++/* #include <argp.h> */
+ 
+ /**
+  * \file xgandalf.h
