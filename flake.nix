@@ -23,7 +23,7 @@
           };
         in
         with pkgs; {
-          inherit crystfel crystfel-headless;
+          inherit crystfel crystfel-headless seedee;
         };
     };
 }
