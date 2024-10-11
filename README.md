@@ -2,6 +2,16 @@
 
 This flake exports an overlay and some packages directly which are used at [DESY](https://www.desy.de).
 
+**Note**: For tango packages, check out [tango-flake](https://gitlab.desy.de/cfel-sc-public/tango-flake)
+
+## Packages inside
+
+- lavue (without pytango though)
+- crystfel
+- asapo
+- seedee
+- silx
+
 ## Usage
 
 Either run software directly from the flake:

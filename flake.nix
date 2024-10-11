@@ -34,6 +34,7 @@
         asapo = final.callPackage ./asapo.nix { };
         seedee = final.callPackage ./seedee.nix { };
         silx = final.callPackage ./silx.nix { };
+        lavue = final.callPackage ./lavue.nix { };
       };
       packages.${system} =
         let
@@ -43,7 +44,7 @@
           };
         in
         with pkgs; {
-          inherit crystfel crystfel-headless seedee silx;
+          inherit crystfel crystfel-headless seedee silx lavue;
         };
     };
 }
