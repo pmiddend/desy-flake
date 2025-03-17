@@ -190,10 +190,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.11.1";
+  version = "1ec2c81bd613878ac231413d2c0776921a0275fa";
   src = fetchurl {
-    url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
+    url = "https://gitlab.desy.de/thomas.white/crystfel/-/archive/${version}/crystfel-${version}.tar.gz";
+    sha256 = "sha256-akeIEpyTF4HqRDKh4FjWJ20pVtmedm6JOeXbYzXHjQc=";
   };
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
     ++ lib.optionals withGui [ wrapGAppsHook3 ];

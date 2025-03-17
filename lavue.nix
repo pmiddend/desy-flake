@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     pyqt5
     pillow
-    fabio
+    pytango
     requests
     pyqtgraph
     numpy

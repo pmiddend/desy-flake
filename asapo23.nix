@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
   pname = "asapo";
 
-  version = "23.11.1";
+  version = "23.12.0-alpha";
 
   src = fetchurl {
     url = "https://gitlab.desy.de/asapo/asapo/-/archive/${version}/asapo-${version}.tar.gz";
-    hash = "sha256-eEKYEjGkUIIsOEjKDWg+4SnqtHTMSDak6lnyxnWI1FU=";
+    hash = "sha256-Fr/rkAttoaAeFJ5PIfjPjd9ODRL45rWzVaa1uhPergk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,5 +28,5 @@ stdenv.mkDerivation rec {
     "-DBUILD_CLIENTS_ONLY=ON"
   ];
 
-  patches = [ ./remove-asapo-git-refs.patch ];
+  patches = [ ./remove-asapo-git-refs-23.patch ];
 }

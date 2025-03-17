@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gitlab.desy.de/fs-sc/seedee/-/archive/${version}/seedee-${version}.tar.gz";
-    sha256 = "sha256-uUN5rU5WQRqNSfTVk7Up4QynNT1JYHw6iky46vW2G3k=";
+    sha256 = "sha256-wZcFKhFh8AkEVkElkEFNytYBHubBxWLhhIgfH7yMtso=";
   };
 
   doCheck = true;
