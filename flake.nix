@@ -24,7 +24,7 @@
             -e 's/@ASAPO_BROKER_API_VER@/v0.7/' \
             -e 's/@ASAPO_FILE_TRANSFER_SERVICE_API_VER@/v0.2/' \
             -e 's/@ASAPO_RECEIVER_API_VER@/v0.7/' \
-            -e 's/@ASAPO_RDS_API_VER@/v0.1/' common/go/src/asapo_common/asapoVersion/asapoVersion_lib.go.in > common/go/src/asapo_common/asapoVersion/asapoVersion_lib.go
+            -e 's/@ASAPO_RDS_API_VER@/v0.1/' common/go/src/asapo_common/version/version_lib.go.in > common/go/src/asapo_common/version/version_lib.go
       '';
     in
     {
@@ -33,7 +33,7 @@
         asapo-broker = pkgs.buildGoModule {
           pname = "asapo-broker";
           inherit src;
-          inherit asapoVersion;
+          version = asapoVersion;
           modRoot = "broker/src/asapo_broker";
 
           vendorHash = "sha256-M0Pyp8v80FKAtk2qZJHbN6/0TTjAxK/5DG6cOgnMY/g=";
@@ -50,7 +50,7 @@
         asapo-discovery = pkgs.buildGoModule {
           pname = "asapo-discovery";
           inherit src;
-          inherit asapoVersion;
+          version = asapoVersion;
           modRoot = "discovery/src/asapo_discovery";
 
           vendorHash = "sha256-HNdHPAH2t7NNgtgkGiYwo6D5IZT81mY6kD7uopt1Hf0=";
@@ -67,7 +67,7 @@
         asapo-authorizer = pkgs.buildGoModule {
           pname = "asapo-authorizer";
           inherit src;
-          inherit asapoVersion;
+          version = asapoVersion;
           modRoot = "authorizer/src/asapo_authorizer";
 
           vendorHash = "sha256-ZSqUBlEd6Nbj1YDZyFVLnC0yDRtALdKrwyALbA4HK3I=";
@@ -85,7 +85,7 @@
         asapo-file-transfer = pkgs.buildGoModule {
           pname = "asapo-file-transfer";
           inherit src;
-          inherit asapoVersion;
+          version = asapoVersion;
           modRoot = "file_transfer/src/asapo_file_transfer";
 
           vendorHash = "sha256-O8aqGxYUFNEfZcOSX17PVm3WLQm+eAjxDC/Z6DAe9io=";
@@ -103,7 +103,7 @@
         asapo-monitoring-server = pkgs.buildGoModule {
           pname = "asapo-monitoring-server";
           inherit src;
-          inherit asapoVersion;
+          version = asapoVersion;
           modRoot = "monitoring/monitoring_server/src/asapo_monitoring_server";
 
           vendorHash = "sha256-+OTYzacbFwKA9ciPq55QsVscSwc9FyY/nXJg1eIruP0=";
@@ -214,7 +214,18 @@
           };
         in
         with local-pkgs; {
-          inherit crystfel crystfel-headless crystfel-devel crystfel-devel-headless seedee asapo_eiger_connector asapo-libs;
+          inherit crystfel crystfel-headless crystfel-devel crystfel-devel-headless seedee asapo_eiger_connector asapo-libs asapo-broker;
         };
+
+      nixosModules.asapo = { pkgs, config, lib, ... }: import ./asapo-nixos-module.nix {
+        inherit pkgs config lib;
+        default-overlay = self.overlays.default;
+      };
+
+      checks.${system}.asapoVmTest = pkgs.callPackage ./asapo-nixos-test.nix {
+        inherit simplon-stub;
+        asapo-module = self.nixosModules.asapo;
+      };
     };
+
 }
