@@ -1,7 +1,7 @@
 {
   description = "Flake exposing services and applications specific to DESY";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
   inputs.simplon-stub.url = "github:pmiddend/simplon-stub";
 
   outputs = { self, nixpkgs, simplon-stub }:
@@ -22,7 +22,16 @@
           };
         in
         with local-pkgs; {
-          inherit crystfel crystfel-headless crystfel-devel crystfel-devel-headless seedee asapo_eiger_connector asapo-libs asapo-broker;
+          inherit
+            crystfel
+            crystfel-headless
+            crystfel-devel
+            crystfel-devel-headless
+            seedee
+            asapo_eiger_connector
+            asapo-libs
+            asapo-broker
+            asapo-authorizer;
         };
 
       nixosModules.asapo = { pkgs, config, lib, ... }: import ./asapo-nixos-module.nix {

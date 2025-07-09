@@ -1,8 +1,9 @@
 { final, prev, pkgs }:
 let
+  srcCommit = "b33295494a96a726665d03fe52ea359d204d9589";
   src = pkgs.fetchurl {
-    url = "https://gitlab.desy.de/philipp.middendorf/asapo/-/archive/fd5125b8c11217be214f2ea19c49a87bf02cee1e/asapo-fd5125b8c11217be214f2ea19c49a87bf02cee1e.tar.gz";
-    sha256 = "sha256-EnAbpNaQorfjcFYTnD2U1oI/CTlgSLHejCvO2mHHuVg=";
+    url = "https://gitlab.desy.de/philipp.middendorf/asapo/-/archive/${srcCommit}/asapo-${srcCommit}.tar.gz";
+    hash = "sha256-R/H5SxiSyb0zx1vQK9PPA0n548b/yXhSSgNdBV97q0M=";
   };
   asapoVersion = "24.11.1";
   # Here we duplicate whatever CMake does (which is shitty of us, we know)
@@ -27,7 +28,7 @@ rec {
     version = asapoVersion;
     modRoot = "broker/src/asapo_broker";
 
-    vendorHash = "sha256-M0Pyp8v80FKAtk2qZJHbN6/0TTjAxK/5DG6cOgnMY/g=";
+    vendorHash = "sha256-2dPwOEVN1XKawcPUUiNMK+ZK5fqmR4vbgt7h98Bn2CY=";
 
     # I think the tests actually run requests and stuff
     doCheck = false;
@@ -44,7 +45,7 @@ rec {
     version = asapoVersion;
     modRoot = "discovery/src/asapo_discovery";
 
-    vendorHash = "sha256-HNdHPAH2t7NNgtgkGiYwo6D5IZT81mY6kD7uopt1Hf0=";
+    vendorHash = "sha256-x9vRQreDLPrjtpdTozH5ucp2N6GflPGyLTxWxlTWOao=";
 
     # I think the tests actually run requests and stuff
     doCheck = false;
@@ -61,7 +62,7 @@ rec {
     version = asapoVersion;
     modRoot = "authorizer/src/asapo_authorizer";
 
-    vendorHash = "sha256-ZSqUBlEd6Nbj1YDZyFVLnC0yDRtALdKrwyALbA4HK3I=";
+    vendorHash = "sha256-lvnah1U5sTfB3dw+sYQu+Z6zVtqhHFuGk+7Mpc1tO5E=";
 
     # I think the tests actually run requests and stuff
     doCheck = false;
@@ -79,7 +80,7 @@ rec {
     version = asapoVersion;
     modRoot = "file_transfer/src/asapo_file_transfer";
 
-    vendorHash = "sha256-O8aqGxYUFNEfZcOSX17PVm3WLQm+eAjxDC/Z6DAe9io=";
+    vendorHash = "sha256-CclNEY2mf44dfytY1eymJ9kKOdFYr8ekiIYcJKORFsE=";
 
     # I think the tests actually run requests and stuff
     doCheck = false;
@@ -97,7 +98,7 @@ rec {
     version = asapoVersion;
     modRoot = "monitoring/monitoring_server/src/asapo_monitoring_server";
 
-    vendorHash = "sha256-+OTYzacbFwKA9ciPq55QsVscSwc9FyY/nXJg1eIruP0=";
+    vendorHash = "sha256-ly7od+tETxXITjisqa1Xv3XgZkYK0RYs9z8jFut/aic=";
 
     # I think the tests actually run requests and stuff
     doCheck = false;
@@ -179,7 +180,16 @@ rec {
 
   asapo-examples = pkgs.stdenv.mkDerivation {
     name = "asapo-examples";
-    src = /home/pmidden/code/fs-sc/asapo/docs/site/examples/cpp/.;
+    inherit src;
+    # src = /home/pmidden/code/fs-sc/asapo/docs/site/examples/cpp/.;
+
+    sourceRoot = "asapo-${srcCommit}/docs/site/examples/cpp";
+    # sourceRoot = docs/site/examples/cpp/.;
+    # postUnpack = "cd */docs/site/examples/cpp";
+    # postUnpack = ''
+    #   echo "========================="
+    #   cd asapo-7da189747d5fa86e87e1431db7a70cb457c88c3b/docs/site/examples/cpp
+    # '';
 
     nativeBuildInputs = [ pkgs.cmake ];
 
