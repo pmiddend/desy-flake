@@ -15,7 +15,10 @@
     receiver-metrics-port = mkOption { type = types.port; default = 8430; };
     receiver-advertiser-port = mkOption { type = types.port; default = 8431; };
     root-beamtimes-folder = mkOption { type = types.path; default = "/var/lib/asapo/beamtimes"; };
-    current-beamlines-folder = mkOption { type = types.path; default = "/var/lib/asapo/current-beamtime"; };
+    current-beamlines-folder = mkOption { type = types.path; default = "/var/lib/asapo/beamlines"; };
+    tokens-path = mkOption { type = types.path; };
+    secret-key = mkOption { type = types.str; default = "veryverysecretkey"; };
+    secret-key-admin = mkOption { type = types.str; default = "veryverysecretkeyadmin"; };
   };
 
   config = lib.mkIf config.services.asapo.enable {
@@ -181,7 +184,8 @@
 
     systemd.services.asapo-authorizer =
       let
-        secretKeyFile = pkgs.writeText "auth_secret.key" "veryverysecretkey";
+        secretKeyFile = pkgs.writeText "auth_secret.key" config.services.asapo.secret-key;
+        secretKeyFileAdmin = pkgs.writeText "auth_secret_admin.key" config.services.asapo.secret-key-admin;
 
         configFile = pkgs.writeText "config.json"
           ''
@@ -199,7 +203,7 @@
                  }
               ],
               "UserSecretFile":"${secretKeyFile}",
-              "AdminSecretFile":"${secretKeyFile}",
+              "AdminSecretFile":"${secretKeyFileAdmin}",
               "TokenDurationMin":600,
               "Ldap":
               {
@@ -221,6 +225,10 @@
         serviceConfig = {
           User = "asapo";
           Group = "asapo";
+          ExecStartPre = pkgs.writeShellScript "authorizer-start-pre.sh" ''
+            mkdir -p $(dirname ${config.services.asapo.tokens-path})
+            ${pkgs.asapo-authorizer}/bin/authorizer -config ${configFile} create-token -access-types write,read,writeraw -beamline asapo_test -type user-token | ${pkgs.jq}/bin/jq .Token | sed -e 's/"//g' > "${config.services.asapo.tokens-path}"
+          '';
           ExecStart = "${pkgs.asapo-authorizer}/bin/authorizer -config ${configFile}";
         };
       };
@@ -272,13 +280,17 @@
         serviceConfig = {
           User = "asapo";
           Group = "asapo";
+          ExecStartPre = pkgs.writeShellScript "receiver-start-pre.sh" ''
+            mkdir -p ${config.services.asapo.current-beamlines-folder}
+          '';
+
           ExecStart = "${pkgs.asapo-libs}/bin/receiver ${configFile}";
         };
       };
 
     systemd.services.asapo-file-transfer =
       let
-        secretKeyFile = pkgs.writeText "auth_secret.key" "veryverysecretkey";
+        secretKeyFile = pkgs.writeText "auth_secret.key" config.services.asapo.secret-key;
         configFile = pkgs.writeText "config.json"
           ''
             {

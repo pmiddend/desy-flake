@@ -5,7 +5,7 @@ buildPythonPackage {
 
   inherit src;
 
-  sourceRoot = "asapo-fd5125b8c11217be214f2ea19c49a87bf02cee1e/consumer/api/python";
+  sourceRoot = "asapo-7da189747d5fa86e87e1431db7a70cb457c88c3b/producer/api/python/consumer/api/python";
 
   postPatch = ''
     sed -e 's#@EXTRA_LINK_ARGS@#[]#' -e 's#@EXTRA_COMPILE_ARGS@#[]#' setup.py.in > setup.py

@@ -190,10 +190,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "1ec2c81bd613878ac231413d2c0776921a0275fa";
+  version = "59cd6022900884f37db7c25a74453ca951299ce5";
+  # version = "a9c690fffb44dcb11e6d699b01eb83c1792cdf2f";
   src = fetchurl {
     url = "https://gitlab.desy.de/thomas.white/crystfel/-/archive/${version}/crystfel-${version}.tar.gz";
-    sha256 = "sha256-akeIEpyTF4HqRDKh4FjWJ20pVtmedm6JOeXbYzXHjQc=";
+    # sha256 = "sha256-akeIEpyTF4HqRDKh4FjWJ20pVtmedm6JOeXbYzXHjQc=";
+    # hash for 59cd
+    hash = "sha256-+6sOy1TTM77bEMuP1XT+ISZIqZFNE6aDj588IhAkMZo=";
+    # hash = "sha256-fz6JwQn2auHl75VgFpnGIRD1r4pVndk4KUofbeiiMsw=";
   };
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
     ++ lib.optionals withGui [ wrapGAppsHook3 ];
@@ -227,7 +231,7 @@ stdenv.mkDerivation rec {
   patches = [
     # on darwin at least, we need to link to a separate argp library;
     # this patch adds a test for this and the necessary linker options
-    ./link-to-argp-standalone-if-needed.patch
+    # ./link-to-argp-standalone-if-needed-master.patch
   ];
 
   # CrystFEL calls mosflm by searching PATH for it. We could've create a wrapper script that sets the PATH, but
