@@ -206,4 +206,5 @@ rec {
   asapo_eiger_connector = final.python3Packages.callPackage ./asapo_eiger_connector.nix { };
   silx = final.callPackage ./silx.nix { };
   lavue = final.callPackage ./lavue.nix { };
+  h5cpp = final.callPackage ./h5cpp.nix { };
 }

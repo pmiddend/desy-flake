@@ -11,6 +11,7 @@ This flake exports an overlay and some packages directly which are used at [DESY
 - asapo
 - seedee
 - silx
+- h5cpp
 
 ## Usage
 

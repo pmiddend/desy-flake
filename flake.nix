@@ -10,7 +10,7 @@
       pkgs = import nixpkgs { inherit system; };
     in
     {
-      overlays.default = final: prev: import ./asapo-packages.nix {
+      overlays.default = final: prev: import ./packages.nix {
         inherit final prev pkgs;
       };
 
@@ -31,7 +31,8 @@
             asapo_eiger_connector
             asapo-libs
             asapo-broker
-            asapo-authorizer;
+            asapo-authorizer
+            h5cpp;
         };
 
       nixosModules.asapo = { pkgs, config, lib, ... }: import ./asapo-nixos-module.nix {
