@@ -41,3 +41,7 @@ nix run 'git+https://gitlab.desy.de/philipp.middendorf/desy-flake'#crystfel
 	  };
 }
 ```
+
+## asapo
+
+The asapo C libraries come in two versions (both as normal packages you can put into your `buildInputs`): `asapo-libs` and `asapo-libs-devel`. The latter will use a very recent `develop` commit and possibly some patches. The former is just the latest stable version of asapo.

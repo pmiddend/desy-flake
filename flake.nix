@@ -30,6 +30,7 @@
             seedee
             asapo_eiger_connector
             asapo-libs
+            asapo-libs-devel
             asapo-broker
             asapo-authorizer
             h5cpp;

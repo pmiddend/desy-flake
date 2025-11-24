@@ -178,6 +178,60 @@ rec {
     '';
   };
 
+  asapo-libs-devel = with pkgs; stdenv.mkDerivation rec {
+    pname = "asapo-devel";
+
+    # Version is "wrong", we're using a develop version
+    version = "26.01.0";
+
+    src = fetchurl {
+      url = "https://gitlab.desy.de/asapo/asapo/-/archive/4ebf4f1eb32ad06b9ab11691da93a82b5f8c347d/asapo-4ebf4f1eb32ad06b9ab11691da93a82b5f8c347d.tar.gz";
+      hash = "sha256-0VSDXAiZvzcA55WDe90kmkyco436IU+vYfsFDEdnvZ4=";
+      # This is for the stable versions
+      # url = "https://gitlab.desy.de/asapo/asapo/-/archive/${version}/asapo-${version}.tar.gz";
+      # hash = "sha256-DzqjHU4iqunrPTNV22D7FHZTBNzTh1A75qxfc2/VHBE=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+
+    buildInputs = [
+      curl
+      rdkafka
+      mongoc
+      cyrus_sasl
+      # Python is not strictly needed, but the build wants it present.
+      python3
+    ];
+
+    cmakeFlags = [
+      "-DBUILD_PYTHON=OFF"
+      # This is actually just to let cmake not build the clients. We
+      # build them ourselves, with Nix methods.
+      "-DBUILD_CLIENTS_ONLY=ON"
+    ];
+
+    # This is to get rid of a "git" dependency for the version number
+    preConfigure = ''
+      export CI_COMMIT_REF_NAME=${version}
+      export CI_COMMIT_TAG=${version}
+    '';
+
+    # Vendoring rapidjson for good measure.
+    postPatch = ''
+      rm -r 3d_party/rapidjson/include/rapidjson
+      cp -R ${rapidjson}/include 3d_party/rapidjson
+    '';
+
+    patches = [
+      # This is the user data ptr to producer callback
+      (fetchpatch
+        {
+          url = "https://gitlab.desy.de/asapo/asapo/commit/1f714c27eb12b32a330d28f9f09022641084a638.diff";
+          sha256 = "sha256-IP6e8YWkZ4Kc22xA2lrUvyX7F62A6MpGDxgagwy/hdc=";
+        })
+    ];
+  };
+
   asapo-examples = pkgs.stdenv.mkDerivation {
     name = "asapo-examples";
     inherit src;
