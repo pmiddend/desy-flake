@@ -1,0 +1,16 @@
+default:
+  tags:
+    - nix
+
+build:
+  script:
+    - nix build .#crystfel
+    - nix build .#crystfel-headless
+    - nix build .#crystfel-devel
+    - nix build .#crystfel-devel-headless
+    - nix build .#seedee
+    # not public
+    # - nix build .#asapo_eiger_connector
+    - nix build .#h5cpp
+    - nix build .#asapo-libs-devel
+
