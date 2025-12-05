@@ -10,5 +10,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pyproject = true;
+
   dependencies = [ numpy cython h5py ];
 }

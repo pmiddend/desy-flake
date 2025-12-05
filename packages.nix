@@ -185,8 +185,8 @@ rec {
     version = "26.01.0";
 
     src = fetchurl {
-      url = "https://gitlab.desy.de/asapo/asapo/-/archive/4ebf4f1eb32ad06b9ab11691da93a82b5f8c347d/asapo-4ebf4f1eb32ad06b9ab11691da93a82b5f8c347d.tar.gz";
-      hash = "sha256-0VSDXAiZvzcA55WDe90kmkyco436IU+vYfsFDEdnvZ4=";
+      url = "https://gitlab.desy.de/asapo/asapo/-/archive/9b4e0a72250a39246209da00b53357b832164bf5/asapo-9b4e0a72250a39246209da00b53357b832164bf5.tar.gz";
+      hash = "sha256-tbqebg/3EM9PZhanJ74DoCKdUjAi2yKRyxW6Zu89edA=";
       # This is for the stable versions
       # url = "https://gitlab.desy.de/asapo/asapo/-/archive/${version}/asapo-${version}.tar.gz";
       # hash = "sha256-DzqjHU4iqunrPTNV22D7FHZTBNzTh1A75qxfc2/VHBE=";
@@ -221,15 +221,6 @@ rec {
       rm -r 3d_party/rapidjson/include/rapidjson
       cp -R ${rapidjson}/include 3d_party/rapidjson
     '';
-
-    patches = [
-      # This is the user data ptr to producer callback
-      (fetchpatch
-        {
-          url = "https://gitlab.desy.de/asapo/asapo/commit/1f714c27eb12b32a330d28f9f09022641084a638.diff";
-          sha256 = "sha256-IP6e8YWkZ4Kc22xA2lrUvyX7F62A6MpGDxgagwy/hdc=";
-        })
-    ];
   };
 
   asapo-examples = pkgs.stdenv.mkDerivation {

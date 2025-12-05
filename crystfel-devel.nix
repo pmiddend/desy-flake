@@ -26,14 +26,13 @@
 , doxygen
 , opencl-headers
 , ncurses
-, msgpack
+, msgpack-c
 , fftw
 , zeromq
 , ocl-icd
 , gtk3
 , gdk-pixbuf
 , argp-standalone
-, memorymappingHook
 , withGui ? true
 , withBitshuffle ? true
 , asapo
@@ -164,6 +163,12 @@ let
       })
     ];
 
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.0.0)" \
+                       "cmake_minimum_required(VERSION 3.10)"
+    '';
+
     nativeBuildInputs = [ cmake ];
     buildInputs = [ hdf5 lz4 bzip2 ];
 
@@ -190,15 +195,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "59cd6022900884f37db7c25a74453ca951299ce5";
-  # version = "a9c690fffb44dcb11e6d699b01eb83c1792cdf2f";
+  version = "d4398195c79b1acb5142e997d7c6810a55149d5c";
+  # version = "c906555f3c3693f77c65302c77bf3a1e850b56f0";
   src = fetchurl {
-    url = "https://gitlab.desy.de/thomas.white/crystfel/-/archive/${version}/crystfel-${version}.tar.gz";
-    # sha256 = "sha256-akeIEpyTF4HqRDKh4FjWJ20pVtmedm6JOeXbYzXHjQc=";
-    # hash for 59cd
-    hash = "sha256-+6sOy1TTM77bEMuP1XT+ISZIqZFNE6aDj588IhAkMZo=";
-    # hash = "sha256-fz6JwQn2auHl75VgFpnGIRD1r4pVndk4KUofbeiiMsw=";
+    url = "https://gitlab.desy.de/philipp.middendorf/crystfel/-/archive/${version}/crystfel-${version}.tar.gz";
+    hash = "sha256-1tM4djSf/AbDaLf658euXdv8LwU45lxlExNyVsItKio=";
   };
+  # dontStrip = true;
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
     ++ lib.optionals withGui [ wrapGAppsHook3 ];
   buildInputs = [
@@ -208,7 +211,7 @@ stdenv.mkDerivation rec {
     hdf5
     gsl
     ncurses
-    msgpack
+    msgpack-c
     fftw
     fdip
     zeromq
@@ -221,8 +224,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGui [ gtk3 gdk-pixbuf ]
   ++ lib.optionals stdenv.isDarwin [
     argp-standalone
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
-    memorymappingHook
   ]
   ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 

@@ -5,7 +5,7 @@ buildPythonPackage {
 
   inherit src;
 
-  sourceRoot = "asapo-7da189747d5fa86e87e1431db7a70cb457c88c3b/producer/api/python";
+  sourceRoot = "asapo-b33295494a96a726665d03fe52ea359d204d9589/producer/api/python";
 
   postPatch = ''
     sed -e 's#@EXTRA_LINK_ARGS@#[]#' -e 's#@EXTRA_COMPILE_ARGS@#[]#' setup.py.in > setup.py
@@ -17,6 +17,8 @@ buildPythonPackage {
   '';
 
   build-system = [ setuptools ];
+
+  pyproject = true;
 
   dependencies = [ cython numpy ];
 

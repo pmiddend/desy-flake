@@ -2,7 +2,9 @@
 
 buildPythonApplication {
   pname = "asapo_eiger_connector";
-  version = "v0.1.3";
+  version = "v0.1.4";
+
+  pyproject = true;
 
   # Doesn't work because it's not public
   # src = fetchurl {
@@ -11,8 +13,8 @@ buildPythonApplication {
   # };
   src = fetchGit {
     url = "git@gitlab.desy.de:fs-sc/asapo_eiger_connector.git";
-    # rev for v0.1.3 because specifying this directly doesn't work
-    rev = "52638f99d10d0d959adf3773a0fb2aa603f4212b";
+    # rev for v0.1.4 because specifying this directly doesn't work
+    rev = "c88d9880d0c6874990fced4080b947d0030d9c88";
   };
 
   build-system = [ setuptools ];

@@ -18,6 +18,8 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
+  pyproject = true;
+
   dependencies = [ cython numpy ];
 
   buildInputs = [ curl asapo-libs ];

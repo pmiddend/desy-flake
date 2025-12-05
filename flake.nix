@@ -1,7 +1,7 @@
 {
   description = "Flake exposing services and applications specific to DESY";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   inputs.simplon-stub.url = "github:pmiddend/simplon-stub";
 
   outputs = { self, nixpkgs, simplon-stub }:
@@ -24,8 +24,8 @@
         with local-pkgs; {
           inherit
             crystfel
-            crystfel-headless
             crystfel-devel
+            crystfel-headless
             crystfel-devel-headless
             seedee
             asapo_eiger_connector

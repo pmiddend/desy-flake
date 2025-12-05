@@ -1,11 +1,11 @@
 { stdenv, cmake, fetchurl, zlib, nlohmann_json, lib }:
 stdenv.mkDerivation rec {
   pname = "seedee";
-  version = "v0.3.0";
+  version = "v0.3.1";
 
   src = fetchurl {
     url = "https://gitlab.desy.de/fs-sc/seedee/-/archive/${version}/seedee-${version}.tar.gz";
-    sha256 = "sha256-wZcFKhFh8AkEVkElkEFNytYBHubBxWLhhIgfH7yMtso=";
+    hash = "sha256-T5kmsUZ7EDE9d6J9Wel0lWNyNZTANi7Q3LxKrlaAcmY=";
   };
 
   doCheck = true;

@@ -26,14 +26,13 @@
 , doxygen
 , opencl-headers
 , ncurses
-, msgpack
+, msgpack-c
 , fftw
 , zeromq
 , ocl-icd
 , gtk3
 , gdk-pixbuf
 , argp-standalone
-, memorymappingHook
 , withGui ? true
 , withBitshuffle ? true
 , asapo
@@ -164,6 +163,12 @@ let
       })
     ];
 
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.0.0)" \
+                       "cmake_minimum_required(VERSION 3.10)"
+    '';
+
     nativeBuildInputs = [ cmake ];
     buildInputs = [ hdf5 lz4 bzip2 ];
 
@@ -204,7 +209,7 @@ stdenv.mkDerivation rec {
     hdf5
     gsl
     ncurses
-    msgpack
+    msgpack-c
     fftw
     fdip
     zeromq
@@ -217,8 +222,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGui [ gtk3 gdk-pixbuf ]
   ++ lib.optionals stdenv.isDarwin [
     argp-standalone
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
-    memorymappingHook
   ]
   ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 
