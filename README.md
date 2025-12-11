@@ -12,6 +12,7 @@ This flake exports an overlay and some packages directly which are used at [DESY
 - seedee
 - silx
 - h5cpp
+- hdf5-external-filter-plugins
 
 ## Usage
 

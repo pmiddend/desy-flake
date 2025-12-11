@@ -21,6 +21,38 @@ let
   '';
 in
 rec {
+  hdf5-external-filter-plugins = with pkgs; stdenv.mkDerivation rec {
+    pname = "HDF5-External-Filter-Plugins";
+    version = "0.1.0";
+    src = fetchFromGitHub {
+      owner = "nexusformat";
+      repo = pname;
+      rev = "49e3b65eca772bca77af13ba047d8b577673afba";
+      hash = "sha256-bEzfWdZuHmb0PDzCqy8Dey4tLtq+4coO0sT0GzqrTYI=";
+    };
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/spanezz/HDF5-External-Filter-Plugins/commit/6b337fe36da97a3ef72354393687ce3386c0709d.patch";
+        hash = "sha256-wnBEdL/MjEyRHPwaVtuhzY+DW1AFeaUQUmIXh+JaRHo=";
+      })
+    ];
+
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.0.0)" \
+                       "cmake_minimum_required(VERSION 3.10)"
+    '';
+
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ hdf5 lz4 bzip2 ];
+
+    cmakeFlags = [
+      "-DENABLE_BITSHUFFLE_PLUGIN=yes"
+      "-DENABLE_LZ4_PLUGIN=yes"
+      "-DENABLE_BZIP2_PLUGIN=yes"
+    ];
+  };
 
   asapo-broker = pkgs.buildGoModule {
     pname = "asapo-broker";

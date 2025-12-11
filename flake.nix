@@ -33,7 +33,8 @@
             asapo-libs-devel
             asapo-broker
             asapo-authorizer
-            h5cpp;
+            h5cpp
+            hdf5-external-filter-plugins;
         };
 
       nixosModules.asapo = { pkgs, config, lib, ... }: import ./asapo-nixos-module.nix {
