@@ -65,6 +65,9 @@ let
       in
       ''
         cp ${mesonPatch}/meson.build .
+
+        substituteInPlace ccp4/library_utils.c \
+          --replace-fail "  int putenv ();" "  int putenv (char *);"
       '';
   };
   # This is the statically-linked, pre-built binary of mosflm. Compiling it ourselves turns out to be very difficult

@@ -1,11 +1,12 @@
 { final, prev, pkgs }:
 let
-  srcCommit = "b33295494a96a726665d03fe52ea359d204d9589";
+  # Have to take the latest develop, because that one includes gcc-15 fixes
+  srcCommit = "81fd8376233ee73ad6a2f02d42be49096ee340e7";
   src = pkgs.fetchurl {
-    url = "https://gitlab.desy.de/philipp.middendorf/asapo/-/archive/${srcCommit}/asapo-${srcCommit}.tar.gz";
-    hash = "sha256-R/H5SxiSyb0zx1vQK9PPA0n548b/yXhSSgNdBV97q0M=";
+    url = "https://gitlab.desy.de/asapo/asapo/-/archive/${srcCommit}/asapo-${srcCommit}.tar.gz";
+    hash = "sha256-ABaQuKNVW7Fjcq5ubJniUgeQ+67dEN3/Wg8Ir8QVHWg=";
   };
-  asapoVersion = "24.11.1";
+  asapoVersion = "26.02.0";
   # Here we duplicate whatever CMake does (which is shitty of us, we know)
   postPatch = ''
     sed -e 's/@ASAPO_CONSUMER_PROTOCOL@/v0.7/' \
@@ -177,6 +178,7 @@ rec {
 
   asapo-libs = pkgs.stdenv.mkDerivation {
     name = "asapo-libs";
+
     inherit src;
 
     nativeBuildInputs = [ pkgs.cmake ];
@@ -199,6 +201,14 @@ rec {
       "-DBUILD_PYTHON=OFF"
     ];
 
+    # This is to get rid of a "git" dependency for the version number
+    preConfigure = ''
+      export CI_COMMIT_REF_NAME=${srcCommit}
+      export CI_COMMIT_TAG=${srcCommit}
+    '';
+
+    patches = [ ./fix-asapo-for-gcc-15.patch ];
+
     # The following units are built separately
     postPatch = ''
       sed -ie 's/add_subdirectory(broker)//' CMakeLists.txt
@@ -207,51 +217,6 @@ rec {
       sed -ie 's/add_subdirectory(asapo_tools)//' CMakeLists.txt
       sed -ie 's/add_subdirectory(file_transfer)//' CMakeLists.txt
       sed -ie 's/add_subdirectory(monitoring)//' CMakeLists.txt
-    '';
-  };
-
-  asapo-libs-devel = with pkgs; stdenv.mkDerivation rec {
-    pname = "asapo-devel";
-
-    # Version is "wrong", we're using a develop version
-    version = "26.01.0";
-
-    src = fetchurl {
-      url = "https://gitlab.desy.de/asapo/asapo/-/archive/9b4e0a72250a39246209da00b53357b832164bf5/asapo-9b4e0a72250a39246209da00b53357b832164bf5.tar.gz";
-      hash = "sha256-tbqebg/3EM9PZhanJ74DoCKdUjAi2yKRyxW6Zu89edA=";
-      # This is for the stable versions
-      # url = "https://gitlab.desy.de/asapo/asapo/-/archive/${version}/asapo-${version}.tar.gz";
-      # hash = "sha256-DzqjHU4iqunrPTNV22D7FHZTBNzTh1A75qxfc2/VHBE=";
-    };
-
-    nativeBuildInputs = [ cmake ];
-
-    buildInputs = [
-      curl
-      rdkafka
-      mongoc
-      cyrus_sasl
-      # Python is not strictly needed, but the build wants it present.
-      python3
-    ];
-
-    cmakeFlags = [
-      "-DBUILD_PYTHON=OFF"
-      # This is actually just to let cmake not build the clients. We
-      # build them ourselves, with Nix methods.
-      "-DBUILD_CLIENTS_ONLY=ON"
-    ];
-
-    # This is to get rid of a "git" dependency for the version number
-    preConfigure = ''
-      export CI_COMMIT_REF_NAME=${version}
-      export CI_COMMIT_TAG=${version}
-    '';
-
-    # Vendoring rapidjson for good measure.
-    postPatch = ''
-      rm -r 3d_party/rapidjson/include/rapidjson
-      cp -R ${rapidjson}/include 3d_party/rapidjson
     '';
   };
 

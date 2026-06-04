@@ -1,0 +1,12 @@
+diff --git a/common/cpp/include/asapo/common/error.h b/common/cpp/include/asapo/common/error.h
+index 83729464..0605bcc4 100644
+--- a/common/cpp/include/asapo/common/error.h
++++ b/common/cpp/include/asapo/common/error.h
+@@ -6,6 +6,7 @@
+ #include <ostream>
+ #include <string>
+ #include <utility>
++#include <cstdint>
+ 
+ namespace asapo {
+ 
