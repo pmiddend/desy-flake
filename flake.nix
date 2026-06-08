@@ -12,7 +12,7 @@
     in
     {
       overlays.default = final: prev: import ./packages.nix {
-        inherit final prev pkgs;
+        inherit final prev;
       };
 
       packages.${system} =

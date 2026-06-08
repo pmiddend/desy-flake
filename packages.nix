@@ -1,8 +1,8 @@
-{ final, prev, pkgs }:
+{ final, prev }:
 let
   # Have to take the latest develop, because that one includes gcc-15 fixes
   srcCommit = "81fd8376233ee73ad6a2f02d42be49096ee340e7";
-  src = pkgs.fetchurl {
+  src = prev.fetchurl {
     url = "https://gitlab.desy.de/asapo/asapo/-/archive/${srcCommit}/asapo-${srcCommit}.tar.gz";
     hash = "sha256-ABaQuKNVW7Fjcq5ubJniUgeQ+67dEN3/Wg8Ir8QVHWg=";
   };
@@ -22,7 +22,7 @@ let
   '';
 in
 rec {
-  hdf5-external-filter-plugins = with pkgs; stdenv.mkDerivation rec {
+  hdf5-external-filter-plugins = with prev; stdenv.mkDerivation rec {
     pname = "HDF5-External-Filter-Plugins";
     version = "0.1.0";
     src = fetchFromGitHub {
@@ -55,7 +55,7 @@ rec {
     ];
   };
 
-  asapo-broker = pkgs.buildGoModule {
+  asapo-broker = prev.buildGoModule {
     pname = "asapo-broker";
     inherit src;
     version = asapoVersion;
@@ -72,7 +72,7 @@ rec {
 
     inherit postPatch;
   };
-  asapo-discovery = pkgs.buildGoModule {
+  asapo-discovery = prev.buildGoModule {
     pname = "asapo-discovery";
     inherit src;
     version = asapoVersion;
@@ -89,7 +89,7 @@ rec {
 
     inherit postPatch;
   };
-  asapo-authorizer = pkgs.buildGoModule {
+  asapo-authorizer = prev.buildGoModule {
     pname = "asapo-authorizer";
     inherit src;
     version = asapoVersion;
@@ -107,7 +107,7 @@ rec {
     inherit postPatch;
   };
 
-  asapo-file-transfer = pkgs.buildGoModule {
+  asapo-file-transfer = prev.buildGoModule {
     pname = "asapo-file-transfer";
     inherit src;
     version = asapoVersion;
@@ -125,7 +125,7 @@ rec {
     inherit postPatch;
   };
 
-  asapo-monitoring-server = pkgs.buildGoModule {
+  asapo-monitoring-server = prev.buildGoModule {
     pname = "asapo-monitoring-server";
     inherit src;
     version = asapoVersion;
@@ -148,20 +148,20 @@ rec {
   pythonPackagesOverlays = (prev.pythonPackagesOverlays or [ ]) ++ [
     (python-final: python-prev: {
       asapo-consumer =
-        pkgs.python3Packages.callPackage ./asapo_python_consumer.nix {
+        prev.python3Packages.callPackage ./asapo_python_consumer.nix {
           inherit asapoVersion;
           inherit src;
           inherit asapo-libs;
         };
       asapo-producer =
-        pkgs.python3Packages.callPackage ./asapo_python_producer.nix {
+        prev.python3Packages.callPackage ./asapo_python_producer.nix {
           inherit asapoVersion;
           inherit src;
           inherit asapo-libs;
         };
-      seedee = pkgs.python3Packages.callPackage ./seedee-python.nix { seedee-lib = final.seedee; };
+      seedee = prev.python3Packages.callPackage ./seedee-python.nix { seedee-lib = final.seedee; };
 
-      bitshuffle = pkgs.python3Packages.callPackage ./bitshuffle.nix { };
+      bitshuffle = prev.python3Packages.callPackage ./bitshuffle.nix { };
     })
   ];
 
@@ -176,14 +176,14 @@ rec {
 
   python3Packages = final.python3.pkgs;
 
-  asapo-libs = pkgs.stdenv.mkDerivation {
+  asapo-libs = prev.stdenv.mkDerivation {
     name = "asapo-libs";
 
     inherit src;
 
-    nativeBuildInputs = [ pkgs.cmake ];
+    nativeBuildInputs = [ prev.cmake ];
 
-    buildInputs = with pkgs; [
+    buildInputs = with prev; [
       curl
       rdkafka
       mongoc
@@ -199,7 +199,7 @@ rec {
       # Python fails because the dependencies regarding setuptools changed and 3.12 doesn't work
       # Specifically, it says that setuptools isn't found
       "-DBUILD_PYTHON=OFF"
-    ];
+    ] ++ (if prev.stdenv.hostPlatform.isStatic then [ "-DBUILD_SHARED_CLIENT_LIBS=OFF" "-DBUILD_STATIC_CLIENT_LIBS=ON" ] else [ ]);
 
     # This is to get rid of a "git" dependency for the version number
     preConfigure = ''
@@ -220,7 +220,7 @@ rec {
     '';
   };
 
-  asapo-examples = pkgs.stdenv.mkDerivation {
+  asapo-examples = prev.stdenv.mkDerivation {
     name = "asapo-examples";
     inherit src;
     # src = /home/pmidden/code/fs-sc/asapo/docs/site/examples/cpp/.;
@@ -233,9 +233,9 @@ rec {
     #   cd asapo-7da189747d5fa86e87e1431db7a70cb457c88c3b/docs/site/examples/cpp
     # '';
 
-    nativeBuildInputs = [ pkgs.cmake ];
+    nativeBuildInputs = [ prev.cmake ];
 
-    buildInputs = [ final.asapo-libs pkgs.curl ];
+    buildInputs = [ final.asapo-libs prev.curl ];
   };
 
 
