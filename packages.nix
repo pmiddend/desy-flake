@@ -176,49 +176,7 @@ rec {
 
   python3Packages = final.python3.pkgs;
 
-  asapo-libs = prev.stdenv.mkDerivation {
-    name = "asapo-libs";
-
-    inherit src;
-
-    nativeBuildInputs = [ prev.cmake ];
-
-    buildInputs = with prev; [
-      curl
-      rdkafka
-      mongoc
-      cyrus_sasl
-      python3
-      # Needed to build Python bindings for consumer/producer
-      # python3Packages.cython
-      # python3Packages.numpy
-      # python3Packages.setuptools
-    ];
-
-    cmakeFlags = [
-      # Python fails because the dependencies regarding setuptools changed and 3.12 doesn't work
-      # Specifically, it says that setuptools isn't found
-      "-DBUILD_PYTHON=OFF"
-    ] ++ (if prev.stdenv.hostPlatform.isStatic then [ "-DBUILD_SHARED_CLIENT_LIBS=OFF" "-DBUILD_STATIC_CLIENT_LIBS=ON" ] else [ ]);
-
-    # This is to get rid of a "git" dependency for the version number
-    preConfigure = ''
-      export CI_COMMIT_REF_NAME=${srcCommit}
-      export CI_COMMIT_TAG=${srcCommit}
-    '';
-
-    patches = [ ./fix-asapo-for-gcc-15.patch ];
-
-    # The following units are built separately
-    postPatch = ''
-      sed -ie 's/add_subdirectory(broker)//' CMakeLists.txt
-      sed -ie 's/add_subdirectory(discovery)//' CMakeLists.txt
-      sed -ie 's/add_subdirectory(authorizer)//' CMakeLists.txt
-      sed -ie 's/add_subdirectory(asapo_tools)//' CMakeLists.txt
-      sed -ie 's/add_subdirectory(file_transfer)//' CMakeLists.txt
-      sed -ie 's/add_subdirectory(monitoring)//' CMakeLists.txt
-    '';
-  };
+  asapo-libs = final.callPackage ./asapo-libs.nix { };
 
   asapo-examples = prev.stdenv.mkDerivation {
     name = "asapo-examples";
