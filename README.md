@@ -1,5 +1,7 @@
 # Nix Flake for DESY-related projects
 
+**This flake has moved to [DESY GitLab](https://gitlab.desy.de/philipp.middendorf/desy-flake)**
+
 This flake exports an overlay and some packages directly which are used at [DESY](https://www.desy.de).
 
 **Note**: For tango packages, check out [tango-flake](https://gitlab.desy.de/cfel-sc-public/tango-flake)
